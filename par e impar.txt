@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int numero = 1; // Número inicial
+
+  void _incrementarPar() {
+    setState(() {
+      numero += 2;
+    });
+  }
+
+  void _incrementarImpar() {
+    setState(() {
+      numero++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Par ou Ímpar',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Par ou Ímpar'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Número atual: $numero',
+                style: const TextStyle(fontSize: 24),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: _incrementarPar,
+                    child: const Text('Par'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _incrementarImpar,
+                    child: const Text('Ímpar'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
