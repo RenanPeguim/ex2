@@ -1,0 +1,68 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(SimplesApp());
+}
+
+class SimplesApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Aplicativo Simples',
+      home: SimplesHomePage(),
+    );
+  }
+}
+
+class SimplesHomePage extends StatefulWidget {
+  @override
+  _SimplesHomePageState createState() => _SimplesHomePageState();
+}
+
+class _SimplesHomePageState extends State<SimplesHomePage> {
+  // Declaração da variável do tipo String e inicialização
+  String nome = 'Fulano';
+  double opacity = 0.5; // Opacidade inicial usando o widget Opacity
+  Color textColor = Colors.black.withOpacity(0.5); // Opacidade inicial usando cor
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Aplicativo Simples'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                // Muda o valor de nome para o seu próprio nome e imprime no console
+                setState(() {
+                  nome = 'Seu Nome'; // Substitua 'Seu Nome' pelo seu próprio nome
+                  print(nome);
+                  opacity = 1.0; // Altera a opacidade do texto para 1.0 usando o widget Opacity
+                  textColor = Colors.black.withOpacity(1.0); // Altera a cor do texto para totalmente opaco
+                });
+              },
+              child: Text('Mostra Nome'),
+            ),
+            // Usa o widget Opacity para ajustar a opacidade do texto
+            Opacity(
+              opacity: opacity,
+              child: Text(
+                nome,
+                style: TextStyle(
+                  fontSize: 24,
+                  color: textColor, // Cor ajustada com opacidade
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
