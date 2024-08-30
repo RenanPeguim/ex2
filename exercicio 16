@@ -1,0 +1,269 @@
+Notepad++ v8.6.9 bug-fixes & new enhancements:
+
+ 1. Make installation and updates easy & quiet by adding "Yes (Silent)" button.
+ 2. Add new options '/closeRunningNpp' & '/runNppAfterSilentInstall' in the installer.
+ 3. Fix crash of "Next Search Result" command on the empty search result.
+ 4. Fix the regression where the Find dialog size is not remembered across sessions.
+ 5. Fix the regression of content lost by using Encoding "Convert to..." commands. 
+ 6. Fix the regression of exception/crash on Windows Server Core 2022.
+ 7. Prevent DirectWrite from being enabled under Windows Sever.
+ 8. Enhance the quality of Fluent toolbar icon sets for different DPI settings.
+ 9. Improve the look & feel of tabbar close button in dark mode.
+10. Improve the dark mode tab bar icon in the search results panel.
+11. Add ability to pre-populate the predefined color sets for custom tones.
+12. Add "Show All Character" popup menu on toolbar button.
+13. Fix the rectangular selection copy-paste bug.
+14. Allow opening shortcut files (*.lnk) directly if the file extension is changed.
+15. Fix the lost panels issue.
+16. Add Backspace unindent option.
+17. Fix CSS more indentation bug.
+18. Include F13-F24 keys in Shortcut Mapper.
+19. Fix the problem where the last empty clean untitled tab cannot be closed after renaming.
+20. Add plugin a command (NPPM_SETUNTITLEDNAME) to rename untitled tab.
+21. Display a message box with information about disabled backward regex searching.
+22. Fix the display glitch for unsaved tabs containing tab characters.
+23. Fix status bar and tab bar flicker during the GUI updated (fixed only for dark mode).
+24. Fix the issue with "Begin/End Select" command after deletion.
+25. Resolve the integer overflow problem in the Column Editor.
+26. Adjust the position of hits text in the File Progress dialog.
+27. Fix the deployment of other software blocked due to NppShell.
+
+
+Get more info on
+https://notepad-plus-plus.org/downloads/v8.6.9/
+
+
+Included plugins:
+
+1.  NppExport v0.4
+2.  Converter v4.6
+3.  Mime Tool v3.1
+
+
+Updater (Installer only):
+
+* WinGUp (for Notepad++) v5.3
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MainApp());
+}
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: const MainPage(),
+    );
+  }
+}
+
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  List<Activity> activities = [
+    Activity(title: 'Estudar para prova de matemática.', date: '16/08/2024', isChecked: false),
+    Activity(title: 'Campeonato de futebol.', date: '14/08/2024', isChecked: true),
+    Activity(title: 'Festa da Joana.', date: '23/08/2024', isChecked: false),
+    Activity(title: 'Leitura de Don Quixote', date: '25/08/2024', isChecked: false),
+  ];
+
+  void _editActivity(int index) async {
+    final updatedActivity = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditActivityPage(
+          activity: activities[index],
+        ),
+      ),
+    );
+
+    if (updatedActivity != null) {
+      setState(() {
+        activities[index] = updatedActivity;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Atividades'),
+      ),
+      body: ListView.builder(
+        itemCount: activities.length,
+        itemBuilder: (context, index) {
+          final activity = activities[index];
+          return _ActivityItem(
+            title: activity.title,
+            date: activity.date,
+            isChecked: activity.isChecked,
+            onTap: () => _editActivity(index),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ActivityItem extends StatelessWidget {
+  final String title;
+  final String date;
+  final bool isChecked;
+  final VoidCallback onTap;
+
+  const _ActivityItem({
+    required this.title,
+    required this.date,
+    required this.isChecked,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(
+        isChecked ? Icons.check_box : Icons.check_box_outline_blank,
+        color: isChecked ? Colors.black : Colors.blue,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: isChecked ? Colors.black : Colors.blue,
+          fontFamily: 'Quicksand',
+          fontSize: 26,
+          decoration: isChecked ? TextDecoration.lineThrough : null,
+        ),
+      ),
+      trailing: Text(
+        date,
+        style: TextStyle(
+          color: isChecked ? Colors.black : Colors.blue,
+          fontFamily: 'Quicksand',
+          fontSize: 22,
+        ),
+      ),
+      onTap: onTap,
+    );
+  }
+}
+
+class Activity {
+  String title;
+  String date;
+  bool isChecked;
+
+  Activity({
+    required this.title,
+    required this.date,
+    required this.isChecked,
+  });
+}
+
+class EditActivityPage extends StatefulWidget {
+  final Activity activity;
+
+  const EditActivityPage({
+    super.key,
+    required this.activity,
+  });
+
+  @override
+  _EditActivityPageState createState() => _EditActivityPageState();
+}
+
+class _EditActivityPageState extends State<EditActivityPage> {
+  late TextEditingController _titleController;
+  late TextEditingController _dateController;
+  late bool _isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.activity.title);
+    _dateController = TextEditingController(text: widget.activity.date);
+    _isChecked = widget.activity.isChecked;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edição de atividade'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _titleController,
+              decoration: const InputDecoration(
+                labelText: 'Título',
+              ),
+              style: const TextStyle(
+                fontFamily: 'Quicksand',
+                fontSize: 26,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _dateController,
+              decoration: const InputDecoration(
+                labelText: 'Data (dd/MM/yyyy)',
+              ),
+              keyboardType: TextInputType.datetime,
+              style: const TextStyle(
+                fontFamily: 'Quicksand',
+                fontSize: 22,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                const Text(
+                  'Concluído',
+                  style: TextStyle(
+                    fontFamily: 'Quicksand',
+                    fontSize: 22,
+                  ),
+                ),
+                Switch(
+                  value: _isChecked,
+                  onChanged: (value) {
+                    setState(() {
+                      _isChecked = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 32),
+            FilledButton(
+              onPressed: () {
+                // Save changes and return updated activity
+                Navigator.pop(
+                  context,
+                  Activity(
+                    title: _titleController.text,
+                    date: _dateController.text,
+                    isChecked: _isChecked,
+                  ),
+                );
+              },
+              child: const Text('Salvar'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
